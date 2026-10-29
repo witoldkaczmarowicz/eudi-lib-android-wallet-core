@@ -40,15 +40,22 @@ internal class IssuerAuthorization(
      * otherwise the authorization handler will be used for user authorization
      * @param issuer The issuer to authorize.
      * @param txCode The pre-authorization code.
+     * @param additionalAuthorizationParameters an optional additional parameters that will be appended to the authorization request
      */
-    suspend fun authorize(issuer: Issuer, txCode: String?): AuthorizedRequest {
+    suspend fun authorize(
+        issuer: Issuer,
+        txCode: String?,
+        additionalAuthorizationParameters: Map<String, String>? = null,
+    ): AuthorizedRequest {
         return with(issuer) {
             when {
                 isPreAuthorized() -> authorizeWithPreAuthorizationCode(txCode)
 
                 else -> {
-                    val prepareAuthorizationCodeRequest = prepareAuthorizationRequest().getOrThrow()
-                    val authorizationUrl = prepareAuthorizationCodeRequest.authorizationCodeURL.value.toString()
+                    val prepareAuthorizationCodeRequest =
+                        prepareAuthorizationRequest(additionalAuthorizationParameters = additionalAuthorizationParameters).getOrThrow()
+                    val authorizationUrl =
+                        prepareAuthorizationCodeRequest.authorizationCodeURL.value.toString()
                     val authResponse = authorizationHandler.authorize(authorizationUrl).getOrThrow()
                     prepareAuthorizationCodeRequest.authorizeWithAuthorizationCode(
                         AuthorizationCode(authResponse.authorizationCode),

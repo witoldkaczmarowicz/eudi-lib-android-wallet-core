@@ -123,6 +123,7 @@ interface OpenId4VciManager {
      * @param credentialConfigurationIds the list of configuration identifiers to issue the document
      * @param txCode the transaction code to use for pre-authorized issuing
      * @param executor the executor defines the thread on which the callback will be called. If null, the callback will be called on the main thread
+     * @param additionalAuthorizationParameters an optional additional parameters that will be appended to the authorization request
      * @param onIssueEvent the callback to be called when the document is issued
      */
     fun issueDocumentByConfigurationIdentifiers(
@@ -130,6 +131,7 @@ interface OpenId4VciManager {
         credentialConfigurationIds: List<String>,
         txCode: String? = null,
         executor: Executor? = null,
+        additionalAuthorizationParameters: Map<String, String>? = null,
         onIssueEvent: OnIssueEvent,
     )
 
@@ -139,6 +141,7 @@ interface OpenId4VciManager {
      * @param format the document format to issue
      * @param txCode the transaction code to use for pre-authorized issuing
      * @param executor the executor defines the thread on which the callback will be called. If null, the callback will be called on the main thread
+     * @param additionalAuthorizationParameters an optional additional parameters that will be appended to the authorization request
      * @param onIssueEvent the callback to be called when the document is issued
      */
     fun issueDocumentByFormat(
@@ -146,6 +149,7 @@ interface OpenId4VciManager {
         format: DocumentFormat,
         txCode: String? = null,
         executor: Executor? = null,
+        additionalAuthorizationParameters: Map<String, String>? = null,
         onIssueEvent: OnIssueEvent,
     )
 

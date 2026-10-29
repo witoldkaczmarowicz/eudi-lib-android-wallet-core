@@ -80,7 +80,7 @@ class CredentialIssuanceLoggerTest {
         val delegate = mockk<OpenId4VciManager>(relaxed = true)
         val callback = slot<OpenId4VciManager.OnIssueEvent>()
         every {
-            delegate.issueDocumentByConfigurationIdentifiers(any(), any(), any(), any(), capture(callback))
+            delegate.issueDocumentByConfigurationIdentifiers(any(), any(), any(), any(), any(), capture(callback))
         } just Runs
         val recorder = RecordingLogManager()
         val logger = CredentialIssuanceLogger(delegate, recorder)
@@ -220,7 +220,7 @@ class CredentialIssuanceLoggerTest {
         val delegate = mockk<OpenId4VciManager>(relaxed = true)
         val callback = slot<OpenId4VciManager.OnIssueEvent>()
         every {
-            delegate.issueDocumentByConfigurationIdentifiers(any(), any(), any(), any(), capture(callback))
+            delegate.issueDocumentByConfigurationIdentifiers(any(), any(), any(), any(), any(), capture(callback))
         } just Runs
         val recorder = RecordingLogManager()
         val logger = CredentialIssuanceLogger(delegate, recorder)
@@ -243,7 +243,7 @@ class CredentialIssuanceLoggerTest {
         val delegate = mockk<OpenId4VciManager>(relaxed = true)
         val callback = slot<OpenId4VciManager.OnIssueEvent>()
         every {
-            delegate.issueDocumentByConfigurationIdentifiers(any(), any(), any(), any(), capture(callback))
+            delegate.issueDocumentByConfigurationIdentifiers(any(), any(), any(), any(), any(), capture(callback))
         } just Runs
         val recorder = RecordingLogManager()
         val logger = CredentialIssuanceLogger(delegate, recorder)
@@ -265,7 +265,7 @@ class CredentialIssuanceLoggerTest {
         val delegate = mockk<OpenId4VciManager>(relaxed = true)
         val callback = slot<OpenId4VciManager.OnIssueEvent>()
         every {
-            delegate.issueDocumentByConfigurationIdentifiers(any(), any(), any(), any(), capture(callback))
+            delegate.issueDocumentByConfigurationIdentifiers(any(), any(), any(), any(), any(), capture(callback))
         } just Runs
         val recorder = RecordingLogManager()
         val logger = CredentialIssuanceLogger(delegate, recorder)
@@ -293,7 +293,7 @@ class CredentialIssuanceLoggerTest {
         val delegate = mockk<OpenId4VciManager>(relaxed = true)
         val callback = slot<OpenId4VciManager.OnIssueEvent>()
         every {
-            delegate.issueDocumentByConfigurationIdentifiers(any(), any(), any(), any(), capture(callback))
+            delegate.issueDocumentByConfigurationIdentifiers(any(), any(), any(), any(), any(), capture(callback))
         } just Runs
         val recorder = RecordingLogManager()
         val logger = CredentialIssuanceLogger(delegate, recorder)
@@ -336,7 +336,7 @@ class CredentialIssuanceLoggerTest {
         val issueCallback = slot<OpenId4VciManager.OnIssueEvent>()
         val deferredCallback = slot<OpenId4VciManager.OnDeferredIssueResult>()
         every {
-            delegate.issueDocumentByConfigurationIdentifiers(any(), any(), any(), any(), capture(issueCallback))
+            delegate.issueDocumentByConfigurationIdentifiers(any(), any(), any(), any(), any(), capture(issueCallback))
         } just Runs
         every {
             delegate.issueDeferredDocument(any(), any(), capture(deferredCallback))
@@ -430,7 +430,7 @@ class CredentialIssuanceLoggerTest {
         val delegate = mockk<OpenId4VciManager>(relaxed = true)
         val callback = slot<OpenId4VciManager.OnIssueEvent>()
         every {
-            delegate.issueDocumentByConfigurationIdentifiers(any(), any(), any(), any(), capture(callback))
+            delegate.issueDocumentByConfigurationIdentifiers(any(), any(), any(), any(), any(), capture(callback))
         } just Runs
         val recorder = RecordingLogManager()
         val logger = CredentialIssuanceLogger(delegate, recorder)
@@ -455,7 +455,7 @@ class CredentialIssuanceLoggerTest {
     fun `an issuance abandoned before Started logs nothing`() {
         val delegate = mockk<OpenId4VciManager>(relaxed = true)
         every {
-            delegate.issueDocumentByConfigurationIdentifiers(any(), any(), any(), any(), any())
+            delegate.issueDocumentByConfigurationIdentifiers(any(), any(), any(), any(), any(), any())
         } just Runs
         val recorder = RecordingLogManager()
         val logger = CredentialIssuanceLogger(delegate, recorder)
@@ -463,7 +463,7 @@ class CredentialIssuanceLoggerTest {
         // The user started issuance, went to the authorization browser, then backed out, so no
         // IssueEvent fires. The entry is written at IssueEvent.Started (after authorization), not at
         // initiation, so backing out before authorization logs nothing.
-        logger.issueDocumentByConfigurationIdentifiers("https://issuer.example", listOf("cfgA", "cfgB"), null, null) {}
+        logger.issueDocumentByConfigurationIdentifiers("https://issuer.example", listOf("cfgA", "cfgB"), null, null, null) {}
 
         assertTrue(recorder.emissions.isEmpty())
         assertTrue(recorder.entries.isEmpty())
@@ -474,7 +474,7 @@ class CredentialIssuanceLoggerTest {
         val delegate = mockk<OpenId4VciManager>(relaxed = true)
         val callback = slot<OpenId4VciManager.OnIssueEvent>()
         every {
-            delegate.issueDocumentByConfigurationIdentifiers(any(), any(), any(), any(), capture(callback))
+            delegate.issueDocumentByConfigurationIdentifiers(any(), any(), any(), any(), any(), capture(callback))
         } just Runs
         val recorder = RecordingLogManager()
         val logger = CredentialIssuanceLogger(delegate, recorder)
@@ -493,7 +493,7 @@ class CredentialIssuanceLoggerTest {
         val delegate = mockk<OpenId4VciManager>(relaxed = true)
         val callback = slot<OpenId4VciManager.OnIssueEvent>()
         every {
-            delegate.issueDocumentByConfigurationIdentifiers(any(), any(), any(), any(), capture(callback))
+            delegate.issueDocumentByConfigurationIdentifiers(any(), any(), any(), any(), any(), capture(callback))
         } just Runs
         val recorder = RecordingLogManager()
         val logger = CredentialIssuanceLogger(delegate, recorder)

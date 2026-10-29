@@ -145,7 +145,7 @@ internal class DefaultOpenId4VciManager(
             listOf(credentialConfigurationId),
             txCode,
             executor,
-            onIssueEvent
+            onIssueEvent = onIssueEvent
         )
     }
 
@@ -154,6 +154,7 @@ internal class DefaultOpenId4VciManager(
         credentialConfigurationIds: List<String>,
         txCode: String?,
         executor: Executor?,
+        additionalAuthorizationParameters: Map<String, String>?,
         onIssueEvent: OpenId4VciManager.OnIssueEvent,
     ) {
         launch(executor, onIssueEvent) { coroutineScope, listener ->
@@ -163,7 +164,7 @@ internal class DefaultOpenId4VciManager(
                     credentialConfigurationIds.map{ id -> CredentialConfigurationIdentifier(id) }
                 )
                 val offer = Offer(issuer.credentialOffer, issuerRegistration)
-                doIssue(issuer, offer, txCode, listener, userTriggered = true)
+                doIssue(issuer, offer, txCode, listener, userTriggered = true, additionalAuthorizationParameters)
             } catch (e: Throwable) {
                 listener(failure(e))
                 coroutineScope.cancel("issueDocumentByConfigurationIdentifier failed", e)
@@ -176,13 +177,14 @@ internal class DefaultOpenId4VciManager(
         format: DocumentFormat,
         txCode: String?,
         executor: Executor?,
+        additionalAuthorizationParameters: Map<String, String>?,
         onIssueEvent: OpenId4VciManager.OnIssueEvent,
     ) {
         launch(executor, onIssueEvent) { coroutineScope, listener ->
             try {
                 val (issuer, issuerRegistration) = issuerCreator.createIssuer(issuerUrl, format)
                 val offer = Offer(issuer.credentialOffer, issuerRegistration)
-                doIssue(issuer, offer, txCode, listener, userTriggered = true)
+                doIssue(issuer, offer, txCode, listener, userTriggered = true, additionalAuthorizationParameters)
             } catch (e: Throwable) {
                 listener(failure(e))
                 coroutineScope.cancel("issueDocumentByDocType failed", e)
@@ -591,8 +593,9 @@ internal class DefaultOpenId4VciManager(
         txCode: String?,
         listener: OpenId4VciManager.OnResult<IssueEvent>,
         userTriggered: Boolean,
+        additionalAuthorizationParameters: Map<String, String>? = null,
     ) {
-        var authorizedRequest = issuerAuthorization.authorize(issuer, txCode)
+        var authorizedRequest = issuerAuthorization.authorize(issuer, txCode, additionalAuthorizationParameters)
         val issuancePayloads = resolveIssuanceRequestPayloads(offer, authorizedRequest.credentialIdentifiers)
         listener(IssueEvent.Started(issuancePayloads.size))
         val issuedDocumentIds = mutableListOf<DocumentId>()
