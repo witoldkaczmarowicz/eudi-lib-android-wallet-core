@@ -24,6 +24,7 @@ import eu.europa.ec.eudi.wallet.internal.d
 import eu.europa.ec.eudi.wallet.internal.e
 import eu.europa.ec.eudi.wallet.issue.openid4vci.OpenId4VciManager.Companion.TAG
 import eu.europa.ec.eudi.wallet.logging.Logger
+import eu.europa.ec.eudi.openid4vci.AdditionalParameters
 
 /**
  * Authorizes an [Issuer] and provides the authorization code.
@@ -40,15 +41,23 @@ internal class IssuerAuthorization(
      * otherwise the authorization handler will be used for user authorization
      * @param issuer The issuer to authorize.
      * @param txCode The pre-authorization code.
+     * @param additionalAuthorizationParameters optional parameters appended to the authorization request
      */
-    suspend fun authorize(issuer: Issuer, txCode: String?): AuthorizedRequest {
+    suspend fun authorize(
+        issuer: Issuer,
+        txCode: String?,
+        additionalAuthorizationParameters: Map<String, String>? = null,
+    ): AuthorizedRequest {
         return with(issuer) {
             when {
                 isPreAuthorized() -> authorizeWithPreAuthorizationCode(txCode)
 
                 else -> {
-                    val prepareAuthorizationCodeRequest = prepareAuthorizationRequest().getOrThrow()
-                    val authorizationUrl = prepareAuthorizationCodeRequest.authorizationCodeURL.value.toString()
+                    val additionalParameters = additionalAuthorizationParameters?.let { AdditionalParameters(it) }
+                    val prepareAuthorizationCodeRequest =
+                        prepareAuthorizationRequest(additionalParameters = additionalParameters).getOrThrow()
+                    val authorizationUrl =
+                        prepareAuthorizationCodeRequest.authorizationCodeURL.value.toString()
                     val authResponse = authorizationHandler.authorize(authorizationUrl).getOrThrow()
                     prepareAuthorizationCodeRequest.authorizeWithAuthorizationCode(
                         AuthorizationCode(authResponse.authorizationCode),

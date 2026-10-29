@@ -72,9 +72,10 @@ class CredentialIssuanceLogger(
         credentialConfigurationIds: List<String>,
         txCode: String?,
         executor: Executor?,
+        additionalAuthorizationParameters: Map<String, String>?,
         onIssueEvent: OpenId4VciManager.OnIssueEvent,
     ) = delegate.issueDocumentByConfigurationIdentifiers(
-        issuerUrl, credentialConfigurationIds, txCode, executor,
+        issuerUrl, credentialConfigurationIds, txCode, executor, additionalAuthorizationParameters,
         wrapIssue(onIssueEvent, seed = IssuanceSeed(requested = credentialConfigurationIds.size))
     )
 
@@ -83,8 +84,12 @@ class CredentialIssuanceLogger(
         format: DocumentFormat,
         txCode: String?,
         executor: Executor?,
+        additionalAuthorizationParameters: Map<String, String>?,
         onIssueEvent: OpenId4VciManager.OnIssueEvent,
-    ) = delegate.issueDocumentByFormat(issuerUrl, format, txCode, executor, wrapIssue(onIssueEvent))
+    ) = delegate.issueDocumentByFormat(
+        issuerUrl, format, txCode, executor, additionalAuthorizationParameters,
+        wrapIssue(onIssueEvent)
+    )
 
     override fun issueDocumentByConfigurationIdentifier(
         issuerUrl: String,
